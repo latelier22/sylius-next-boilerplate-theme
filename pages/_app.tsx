@@ -1,3 +1,6 @@
+import 'tailwindcss/tailwind.css';
+import '../styles/globals.css';
+
 import { AppProps } from 'next/app';
 import React, {useState} from 'react';
 import CartContext from '../components/CartContext';

@@ -6,6 +6,7 @@ export const getTaxonBySlugFromCollection = (taxons: ITaxon[], taxonTranslatedSl
     let currentTaxon = null;
 
     taxons.map((taxon: ITaxon) => {
+        console.log("cherche current taxon")
         if (getResourceTranslation(taxon).slug === taxonTranslatedSlug) {
             currentTaxon = taxon;
         }

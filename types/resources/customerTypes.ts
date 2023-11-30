@@ -20,9 +20,15 @@ export interface IAuthenticateCustomer {
 }
 
 export interface ICustomerTokenPayload {
-    "id": number;
+    "id": number; // A MODIFIER : IL MANQUE ID
+    "customer" : string
     "roles": [];
     "username": string;
+}
+
+export interface ICustomerTokenData {
+    token: string;
+    customer: string; // ou un type spécifique pour les données du customer
 }
 
 export interface ICustomer {
@@ -51,5 +57,6 @@ export interface ICustomerOrder {
     "id": number;
     "number": string;
     "total": number;
-    "createdAt": string;
+    //"createdAt": string;
+    "checkout_completed_at" : string
 }

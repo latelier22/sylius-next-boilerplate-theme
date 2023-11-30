@@ -68,14 +68,14 @@ const Product = (
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const products = await getAllProducts();    
-
+    console.log("TAXONS :",products[0].mainTaxon)
     const paths = products.map((product: IProduct) => ({
         params: {
-            categorySlug: product.mainTaxon ? getResourceTranslation(product.mainTaxon).slug : getGenericMainTaxonSlug(),
+            categorySlug: product.mainTaxon ? getResourceTranslation(product.mainTaxon) : getGenericMainTaxonSlug(),
             productSlug: getResourceTranslation(product).slug
         }
     }));
-
+    console.log("PATHS :",paths)
     return {
         paths,
         fallback: false

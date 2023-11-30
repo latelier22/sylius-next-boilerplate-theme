@@ -46,6 +46,7 @@ const Password = (
                 'message': "the password has been updated. You can now login" ,
                 'type': 'success'
             });
+            console.log("pwd modifié")
             logoutCustomer(router);
         } else {
             setMessage({

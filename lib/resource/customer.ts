@@ -2,6 +2,7 @@ import { authenthcateCustomer, changeCustomerInformations, changeCustomerPasswor
 import Cookies from 'js-cookie';
 import { NextRouter } from "next/router";
 import { ICustomerTokenPayload } from "../../types/resources/customerTypes";
+import { ICustomerTokenData } from '../../types/resources/customerTypes';
 import jwt from 'jwt-decode';
 
 export const checkIfUserExist = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -91,26 +92,45 @@ export const submitNewCustomerInformations = async (event : React.FormEvent<HTML
 }
 
 export const storeCustomerToken = (customerToken: string) => {
+    
     Cookies.set('customerToken', customerToken, { sameSite:'strict' });
+    //console.log("stokage du token dans cookie",jwt(Cookies.get('customerToken')))
+    
+   
 }
 
-export const getCustomerTokenFromCookie = (): string | false => {
-    const customerToken = Cookies.get('customerToken');
-
-    if (customerToken) {
-        return customerToken;
+function extractCustomerId(url: string): number | false {
+    const parts = url.split("/");
+    const lastPart = parts[parts.length - 1];
+    
+    if (!isNaN(parseInt(lastPart))) {
+        return parseInt(lastPart);
     }
 
     return false;
 }
 
+
+export const getCustomerTokenFromCookie = (): string | false => {
+    const customerToken = Cookies.get('customerToken');
+    //console.log("Get token dans cookie: ",customerToken)
+    if (customerToken) {
+        return customerToken;
+    }
+    return false;
+}
+
 export const getCustomerIdFromToken = (): number | false => {
     const customerToken = getCustomerTokenFromCookie();
-
+    //console.log("getCustomerIdFromToken: customerToken= ID?",customerToken)
     if (customerToken) {
-        const customerTokenDecoded: ICustomerTokenPayload = jwt(customerToken);
-        if (customerTokenDecoded.id) {
-            return customerTokenDecoded.id;
+        const customerData = JSON.parse(customerToken);
+            //console.log("Parsed Customer Data:", customerData);
+        //const customerTokenDecoded: ICustomerTokenPayload = jwt(customerToken);
+        if (customerData.customer) {
+            const customerId= extractCustomerId(customerData.customer)
+            //console.log("ID:",customerId)
+            return customerId;
         }
     }
 
@@ -118,10 +138,12 @@ export const getCustomerIdFromToken = (): number | false => {
 }
 
 export const removeCustomerTokenFromCookie = () => {
+    
     Cookies.remove('customerToken');
 }
 
 export const logoutCustomer = (router: NextRouter) => {
+    console.log("LogoutCustomer => login")
     removeCustomerTokenFromCookie();
     router.push('/account/login');
 }

@@ -14,20 +14,38 @@ export const getApiPublicUrl = (): string => {
 }
 
 export const getRessourceImageUrl = (imageSlug: string): string => {
-    return getApiPublicUrl()+'media/image/'+imageSlug;
+    //console.log("URL IMAGE:", getApiPublicUrl()+imageSlug)
+    return getApiPublicUrl()+imageSlug;
 }
 
 export const getTaxonRelativeUrl = (taxon: ITaxon): string => {
-    return '/'+getPrefixCategories()+'/'+getResourceTranslation(taxon).slug;
+    // A MODIFIER //
+    // return '/'+getPrefixCategories()+'/'+getResourceTranslation(taxon).slug;
+    const parts = taxon.slug.split("/");
+        const lastPart = parts[parts.length - 1];
+    console.log("taxon slug",taxon.slug,lastPart)
+    
+    console.log("getTaxonRelativeUrl",'/'+getPrefixCategories()+'/'+lastPart)
+    return '/'+getPrefixCategories()+'/'+lastPart;
 }
 
 export const getProductRelativeUrl = (product: IProduct) => {
     let mainTaxonSlug = getGenericMainTaxonSlug();
     const productSlug = getResourceTranslation(product).slug;
+    console.log("productSlug",productSlug);
+    console.log("product.mainTaxon",product.mainTaxon);
+    
+
 
     if (product.mainTaxon) {
-        mainTaxonSlug = getResourceTranslation(product.mainTaxon).slug;
-    }
+        const parts = product.mainTaxon.split("/");
+        const lastPart = parts[parts.length - 1];
+         console.log("product.mainTaxon split :",lastPart)
+         mainTaxonSlug = lastPart
+    //     mainTaxonSlug = getResourceTranslation(product.mainTaxon).slug;
+     }
+
+    console.log("getProductRelativeUrl",'/'+getPrefixCategories()+'/'+mainTaxonSlug+'/'+productSlug);
 
     return '/'+getPrefixCategories()+'/'+mainTaxonSlug+'/'+productSlug;
 }

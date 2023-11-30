@@ -11,6 +11,7 @@ import MessageContext from '../../../components/MessageContext';
 import { Helmet } from 'react-helmet';
 import Breadcrumb from '../../../components/layout/breadcrumb';
 import ProductsList from '../../../components/Product/ProductsList';
+import path from 'path';
 
 type CategoryProps = {
     taxons: ITaxon[],
@@ -23,13 +24,13 @@ const Category = (
 ) => {
 
     const { setMessage } = useContext(MessageContext);
-    
+    console.log("Set message :",setMessage )
     useEffect(() => {
         setMessage(null);
     }, []); 
-
+    console.log("CURRENT TAXON :", currentTaxon)
     return (
-
+        
         <Layout taxons={taxons}>
 
             <Helmet>
@@ -50,12 +51,14 @@ const Category = (
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const taxons = await getAllTaxons();
-
+    console.log("CURRENT TAXON :", taxons)
     const paths = taxons.map((taxon: ITaxon) => ({
         params: {
             categorySlug: getResourceTranslation(taxon).slug
         }
     }));
+
+    console.log("PATHS :",paths)
 
     return {
         paths,
@@ -68,6 +71,8 @@ export const getStaticProps: GetStaticProps<CategoryProps> = async ({ params }) 
     const taxonTranslatedSlug = params?.categorySlug as string;
     const currentTaxon = getTaxonBySlugFromCollection(taxons, taxonTranslatedSlug);
     const products = await getProductsByTaxon(currentTaxon);
+
+
 
     return {
         props: {

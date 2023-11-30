@@ -111,6 +111,7 @@ const getOrderToken =  async(): Promise<string> => {
 export const getOrderFromCookie = async (): Promise<IOrder | null> => {
     let order = null
     const cookieCartToken = Cookies.get('cartToken');
+    //console.log("PANIER Order?")
 
 
     if (cookieCartToken) {

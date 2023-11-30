@@ -1,6 +1,7 @@
 import { IRegisterCustomer, IAuthenticateCustomer, ICustomerChangePasswords, ICustomerInformations, ICustomerOrder, IReinitPasswordRequest, INewPasswordAfterForgot } from '../../../types/resources/customerTypes';
 import { postResource, getResource, putResource, getCustomerResource } from '../client';
 import { getCustomerIdFromToken } from '../../resource/customer';
+import Cookies from 'js-cookie';
 
 export const reinitPasswordRequest = async (email: IReinitPasswordRequest): Promise<boolean> => {
     const body = email;
@@ -47,6 +48,7 @@ export const authenthcateCustomer = async (customerCredentials: IAuthenticateCus
 export const changeCustomerPassword = async (customerPasswords: ICustomerChangePasswords): Promise<any> => {
     const body = customerPasswords;
 
+    //console.log("Password => getID")
     const customerId = getCustomerIdFromToken();
 
     if (customerId) {
@@ -73,6 +75,7 @@ export const changeCustomerInformations = async (customerInformations: ICustomer
 }
 
 export const getCustomer = async (customerId: number): Promise<any> => {
+    console.log("getCustomer:", customerId)
     const customer = await getCustomerResource('shop/customers/{id}', {
         "id": customerId
     });
@@ -87,14 +90,18 @@ export const isEmailRegistered = async (email: string): Promise<boolean> => {
 }
 
 export const getCustomerOrders = async (): Promise<any> => {
+    //console.log("get orders")
     const orders: ICustomerOrder[] | false = await getResource('shop/orders');
-
+    
     return orders;
 }
 
 export const getCustomerFromCookie = async (): Promise<any> => {
-    const customerId = getCustomerIdFromToken();
+    //console.log("COOKIE:",Cookies.getJSON('customerToken'));
 
+
+    const customerId = getCustomerIdFromToken();
+    //console.log("CUSTOMER ID:",customerId)
     if (customerId) {
         return await getCustomer(customerId);
     } 

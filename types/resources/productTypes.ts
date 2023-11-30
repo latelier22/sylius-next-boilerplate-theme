@@ -33,4 +33,5 @@ export interface IProduct {
     images: IResourceImage[];
     variants: IProductVariant[];
     enabled: boolean;
+    slug: string;
 }

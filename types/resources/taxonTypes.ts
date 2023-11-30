@@ -18,9 +18,11 @@ export interface ITaxonTranslation {
 export interface ITaxon extends IResource {
     id: number;
     code: string;
+    slug: string;
 }
 
 export interface IProductTaxon {
     id: number;
     taxon: string;
+    slug:string;
 }

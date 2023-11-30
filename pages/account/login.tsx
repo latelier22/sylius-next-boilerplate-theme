@@ -21,7 +21,9 @@ const Connexion = (
 
     const onSubmitConnexion = async (event: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
+        console.log("CONNECTING...:")
         const customerToken = await submitConnexion(event);
+        //console.log("TOKEN:",customerToken)
         setLoading(false);
         
         if (!customerToken) {
@@ -30,7 +32,9 @@ const Connexion = (
                 'type': 'error'
             });
         } else {
-            storeCustomerToken(customerToken.token);
+            //console.log("stockage du token =>")
+            storeCustomerToken(customerToken);
+            //console.log("=> retour stockage")
             router.push('/account');
         }
     }
@@ -38,12 +42,15 @@ const Connexion = (
     useEffect(() => {
         (async () => {
             setLoading(true);
+            //console.log('chargement useeffect login')
             const customer = await getCustomerFromCookie();
+
             setLoading(false);
             
             if (customer) {
                 router.push('/account');
             } else {
+                console.log('déconnexion')
                 logoutCustomer(router);
             }
         })();

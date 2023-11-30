@@ -23,15 +23,19 @@ const Account = (
 
     useEffect(() => {
         setLoading(true);
+        //console.log("Loading...")
         setMessage(null);
         (async () => {
             setLoading(true);
             const customer = await getCustomerFromCookie();
+            //console.log("CLIENT:",customer);
             setLoading(false);
             
             if (customer) {
+                //console.log("client existe",customer)
                 setCustomer(customer);
             } else {
+                console.log("Logout router=> /account/login")
                 logoutCustomer(router);
             }
         })();

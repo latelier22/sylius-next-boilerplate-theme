@@ -34,6 +34,7 @@ const Orders = (
             if (customer) {
                 setCustomer(customer);
                 const orders =  await getCustomerOrders();
+                console.log("Commandes",orders);
                 setOrders(orders);
                 setLoading(false);
             } else {
@@ -79,7 +80,7 @@ const Orders = (
                                     return(
                                         <tr key={index}>
                                             <td>{order.number}</td>
-                                            <td>{formatDateToLocale(order.createdAt)}</td>
+                                            <td>{formatDateToLocale(order.checkout_completed_at)}</td>
                                             <td>{formatPaymentState(order.paymentState)}</td>
                                             <td>{formatShippingState(order.shippingState)}</td>
                                             <td>{formatMoney(order.total)}</td>

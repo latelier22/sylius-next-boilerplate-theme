@@ -40,7 +40,7 @@ export const putResource: IPutResource = async (ressourceLocator, pathParams, qu
     if (!response.ok) {
         return false;
     }
-
+    
     return true;
 }
 
@@ -62,6 +62,7 @@ export const getResource: IGetResource = async (ressourceLocator, pathParams, qu
     
     return getFetchResponse(url).then((response) => {
         if (response.ok) {
+            //console.log("RESPONSE OK")
           return response.json();
         } else {
           return false;
@@ -76,12 +77,15 @@ export const getCustomerResource: IGetResource = async (ressourceLocator, pathPa
     const url = getResourceUrl(ressourceLocator, pathParams, queryParams);
     const customerToken = getCustomerTokenFromCookie();
 
+    const bearerToken = "Bearer " + JSON.parse(customerToken).token
+    //console.log("Bearer:", bearerToken)
+
     return await fetch(url, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${customerToken}`
+            'Authorization': `${bearerToken}`
         }
     }).then((response) => {
         if (response.ok) {
@@ -117,11 +121,18 @@ const patchFetchResponse = async (url: string, body?: {}) => {
 const fetchApi = async (httpMethod: string, url: string, body?: {}) => {
 
     const customerToken = getCustomerTokenFromCookie();
+    
+    const bearerToken = "Bearer " + JSON.parse(customerToken).token
+    //console.log("Bearer:", bearerToken)
+    
     let customer = false;
+
 
     if (customerToken) {
         customer = await getCustomerFromCookie();
+        //console.log('client trouvé')
         if (!customer) {
+            //console.log("PAS DE CLIENT=> SUPPRESSION DU COOKIE")
             removeCustomerTokenFromCookie();
         }
     }
@@ -131,7 +142,7 @@ const fetchApi = async (httpMethod: string, url: string, body?: {}) => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': httpMethod === 'PATCH' ? 'application/merge-patch+json' : 'application/json',
-            'Authorization': customer ? `Bearer ${customerToken}` : ''
+            'Authorization': customer ? `${bearerToken}` : ''
         },
         body: body ? JSON.stringify(body) : null
     });
